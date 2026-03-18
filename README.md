@@ -1,32 +1,36 @@
-# Micromouse - Institute of Electrical and Electronic Engineers
-Macro Rat is an autonomouse robot designed to navigate and solve maze problems using FloodFill. In this repository, I share how my team and I achieved this with invaluable guidance from some incredibly supportive individuals. 
+# Micromouse : Institute of Electrical and Electronics Engineers
+
+**Macro Rat** is an autonomous maze-solving robot implementing a FloodFill traversal algorithm on bare-metal embedded hardware. This repository documents the process undertaken by our IEEE team, covering firmware architecture, hardware bring-up, and algorithmic design.
+
+---
 
 # Robotics
 
-Explore my journey into robotics with this Micromouse project! During my Fall quarter at UC Irvine, I collaborated with a team in IEEE to build a robot capable of autonomously solving a maze. This repository includes a beginner-friendly guide covering everything from assembling hardware to coding maze-solving algorithms. It's packed with insights,
-tips, and the lessons I learned along the way. If you're passionate about robotics or looking to start your own Micromouse project, this is the perfect place to begin.
+This repository captures the end-to-end development of a Micromouse platform built during Fall quarter (sophomore year) at UC Irvine under the IEEE student branch. The project involved designing a custom PCB, writing low-level firmware for an STM32 microcontroller, and implementing a real-time maze-solving algorithm. Documentation covers hardware integration, peripheral configuration, and software architecture, intended for engineers looking to understand the full system stack, not just the surface-level assembly.
+
+---
 
 # Hardware
 
-- STM32: The brain of the system, processing inputs and controlling outputs.
-- PCB Chassis: Provides a study framework to mount all hardware components. 
-- Mini DC Motors (2): Drives the wheel, allowing forward and turning motions.
- - 7-9V Battery: Supplies power to the entire robot. 
-- 7805 Voltage Regulator: Converts the battery's voltage to a stable 5V for components. 
-- H-Bridge Motor Driver: Controls the direction and speed of the motors. 
-- Hall Sensor Rotary Encoder: Tracks wheel rotation to measure distance and speed.
-- Infrared Distance Sensors (2): Detects the robot's proximity to walls or obstacles.
+- **STM32 MCU** — Core processing unit; handles sensor polling, motor control loops, and algorithm execution.
+- **Custom PCB Chassis** — Rigid mounting platform with routed power and signal traces for all subsystems.
+- **Mini DC Motors (×2)** — Differential drive configuration enabling forward motion and zero-radius turning.
+- **7–9V Battery Pack** — Main power supply for the drive and logic subsystems.
+- **7805 Linear Voltage Regulator** — Regulates battery input down to a stable 5V rail for digital logic.
+- **H-Bridge Motor Driver** — Bidirectional motor control with PWM speed modulation.
+- **Hall-Effect Rotary Encoders** — Quadrature feedback for closed-loop odometry and velocity estimation.
+- **Infrared Distance Sensors (×2)** — Wall proximity detection used as primary inputs to the navigation state machine.
 
-This hardware forms the foundation of the Micromouse robot, enabling precise control, movement, and sensing for autonomous maze navigation.
+---
 
-# Purpose of this project
+# Project Overview
 
-The "Macro Rat" Embedded Systems project is designed to introduce to new Embedded System Engineers the foundational concepts of robotics, electronics, and programming in a hands-on, engaging way. By building a robot capable of autonomously navigating a maze, participants develop a deep understanding of how various hardware components and algorithms interact to achieve a complex maze through our algorithms and advanced data structures. This project serves as an ideal starting point for anyone looking to explore the exciting field of robotics.
+Macro Rat is a ground-up embedded systems project targeting the core competencies of real-time control, sensor fusion, and autonomous decision-making. The robot executes a FloodFill algorithm to map and solve an unknown maze, dynamically updating its internal cell-cost representation as new wall data is acquired from the IR sensor array.
 
-One primary purpose of this year-long project was to foster problem-solving skills. Navigating a maze autonomously requires the robot to analyze its environment, make decisions, and adjust its movements in real time movements. These challenges push participants to think critically, learn about algorithms like flood-fill or wall-following, and implement strategies for efficient maze-solving. It’s a practical demonstration of how theoretical concepts can be applied to real-world scenarios. Our team has gained hands-on experience with microcontrollers, sensors, motors, and other hardware components, as well as software tools like STM32 Cube IDE. By integrating these elements, the project offers a comprehensive introduction to system design and troubleshooting, skills that are vital for any aspiring engineer or maker.
+The firmware was developed in **STM32CubeIDE** and interfaces directly with hardware peripherals via HAL and low-level register access. Key engineering challenges included tuning PID loops for stable motor control, handling encoder debounce at speed, and managing real-time constraints within a cooperative scheduling model.
 
-Beyond the technical skills, the project emphasizes teamwork and collaboration. Building a Micromouse robot often requires dividing tasks, sharing knowledge, and overcoming obstacles as a group. This collaborative environment mirrors the dynamics of professional engineering projects, preparing participants for future endeavors in the field.
+The project also served as a platform for structured team collaboration responsibilities were partitioned across firmware, hardware, and algorithm development, with integration milestones tracked across the full academic year. This mirrors real-world embedded development workflows and exposes contributors to the full V-model design cycle: from requirements through verification.
 
-Feel free to contribute, modify, and build upon this project to take it to new heights!
+Contributions, forks, and improvements are welcome.
 
 ![Micromouse](micromouse.jpg)
