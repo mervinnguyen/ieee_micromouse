@@ -25,6 +25,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,6 +45,7 @@ typedef enum {
 	turn_R,
 	turn_180
 } move_t;
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -61,7 +64,6 @@ typedef enum {
 #define K_str 0.0004
 
 #define loop_period 1
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -71,12 +73,10 @@ typedef enum {
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
-
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
 
-/* USER CODE BEGIN PV */
 uint16_t IR_dists[4] = {0};
 uint16_t IR_data[4][15] = {{0}};
 uint16_t wall_standard[4] = {2500, 1040, 1030, 2590};
@@ -94,7 +94,7 @@ int32_t initial_enc_right = 0;
 
 int32_t d_L = 0;
 int32_t d_R = 0;
-int32_t d_center = 0;	// center distance
+int32_t d_center = 0;
 int32_t prev_d_center = 0;
 int32_t prev_cell_distance = 0;
 
@@ -113,12 +113,14 @@ uint16_t prev_count_right = 0;
 int motorL = 0;
 int motorR = 0;
 
-// this change better register
+
+/* Base velocity constants for forward and turn maneuvers*/
 const float base_v_fwd_L = 0.5;
 const float base_v_fwd_R = 0;
-const float base_v_turn_L = 0.7;//0.48;
-const float base_v_turn_R = 0.81;//0.82;
-//const float base_v_turn = 1.5;
+const float base_v_turn_L = 0.7;
+const float base_v_turn_R = 0.81;
+
+/* Movement flags */
 int fwd_movement = 0;
 int enc_right_mvt = 0;
 int enc_left_mvt = 0;
@@ -142,18 +144,15 @@ int intended_angle = 0;
 
 move_t movement = stopped;
 
-// const int K_fwd = ?;
-// testing to merge into main here
-// hello Github
-/* USER CODE END PV */
-
 /* Private function prototypes -----------------------------------------------*/
+
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM4_Init(void);
+
 /* USER CODE BEGIN PFP */
 static void ADC1_Select_CH1(void);
 static void ADC1_Select_CH4(void);
@@ -162,8 +161,7 @@ static void ADC1_Select_CH8(void);
 static void ADC1_Select_CH9(void);
 /* USER CODE END PFP */
 
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
+/* Selects the GPIO pair and ADC channel for the given IR sensor position (FL, L, R, FR) and returns a raw ADC distance reading. */
 uint16_t measure_dist(dist_t dist) {
 	GPIO_TypeDef* emitter_port;
 	uint16_t emitter_pin;
@@ -203,7 +201,7 @@ uint16_t measure_dist(dist_t dist) {
 			break;
 	}
 
-	HAL_GPIO_WritePin(emitter_port, emitter_pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(emitter_port, emitter_pin, GPIO_PIN_SET);
 //	HAL_Delay(5);
 
 	HAL_ADC_Start(&hadc1);
@@ -216,7 +214,8 @@ uint16_t measure_dist(dist_t dist) {
 	return adc_val;
 }
 
-uint16_t scaled_average(dist_t sensor)	// dist tells us which sensor's distance we are measuring
+/* Distance averaging function */
+uint16_t scaled_average(dist_t sensor)
 {
 	static int IR_index = 0;
 
@@ -475,40 +474,20 @@ void about_turn()		// I swear this is a real term
 	stop();
 	HAL_Delay(500);
 }
-/* USER CODE END 0 */
 
-/**
-  * @brief  The application entry point.
-  * @retval int
-  */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
-  /* USER CODE END 1 */
 
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
   SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM2_Init();
   MX_ADC1_Init();
   MX_TIM3_Init();
   MX_TIM4_Init();
-  /* USER CODE BEGIN 2 */
+
   HAL_TIM_Base_Start_IT(&htim2);		// start timer 2 in interrupt mode
 
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
@@ -531,11 +510,6 @@ int main(void)
   HAL_GPIO_WritePin(MR_FWD_GPIO_Port, MR_FWD_Pin, 1);
   HAL_GPIO_WritePin(MR_BWD_GPIO_Port, MR_BWD_Pin, 0);
 
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-
   while (1)
   {
 //	  if (d_center > 10)
@@ -551,8 +525,6 @@ int main(void)
   HAL_GPIO_WritePin(ML_BWD_GPIO_Port, ML_BWD_Pin, 0);
   HAL_GPIO_WritePin(MR_FWD_GPIO_Port, MR_FWD_Pin, 0);
   HAL_GPIO_WritePin(MR_BWD_GPIO_Port, MR_BWD_Pin, 0);
-
-  /* USER CODE END 3 */
 }
 
 /**
@@ -754,9 +726,6 @@ static void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN TIM3_Init 2 */
-
-  /* USER CODE END TIM3_Init 2 */
 
 }
 
