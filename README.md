@@ -34,3 +34,5 @@ The project also served as a platform for structured team collaboration responsi
 Contributions, forks, and improvements are welcome.
 
 ![Micromouse](docs/micromouse.jpg)
+
+![Final Results](docs/FinalResult.png)
