@@ -7,7 +7,6 @@
 #include <string>
 
 class API {
-
 public:
 
     static int mazeWidth();

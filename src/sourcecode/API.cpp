@@ -1,7 +1,7 @@
 #include "API.h"
 
-#include <cstdlib> //for atoi function
-#include <iostream> //for input and output
+#include <cstdlib>
+#include <iostream> 
 
 int API::mazeWidth() {
     //get the width of maze and return value

@@ -11,7 +11,7 @@ void log(const std::string& text) {
     std::cerr << text << std::endl;
 };
     
-enum Direction {
+enum DirectionInt {
     NORTH = 8,
     EAST = 4,
     SOUTH = 2,
@@ -32,7 +32,7 @@ struct Coord {
 
 struct Cell {
     Coord pos;
-    Direction dir;
+    DirectionInt dir;
     bool blocked;
 };
 
@@ -43,7 +43,7 @@ struct CellList {
 
 struct Maze {
     Coord mouse_pos;
-    Direction mouse_dir;
+    DirectionInt mouse_dir;
 
     int distances[16][16];
     int cellWalls[16][16];
